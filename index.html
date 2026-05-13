@@ -20,7 +20,6 @@ body { font-family: 'Heebo', sans-serif; background: #fff8f4; min-height: 100vh;
   max-width: 420px; width: 100%;
   box-shadow: 0 4px 40px rgba(255,150,100,0.12); text-align: center;
 }
-.login-mascot { width: 100px; height: 100px; object-fit: contain; margin-bottom: 12px; border-radius: 50%; }
 .login-card h1 { font-size: 26px; font-weight: 700; color: #e07850; margin-bottom: 8px; }
 .login-card .sub { font-size: 15px; color: #b07060; margin-bottom: 32px; }
 .login-tabs { display: flex; gap: 8px; margin-bottom: 28px; }
@@ -45,13 +44,11 @@ body { font-family: 'Heebo', sans-serif; background: #fff8f4; min-height: 100vh;
 .btn-primary:active { transform: scale(0.98); }
 .error-msg { color: #e05050; font-size: 13px; margin-top: 10px; min-height: 20px; }
 
-/* HEADER */
 .form-header {
   background: white; padding: 12px 28px; border-bottom: 1px solid #fcd5bc;
   display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 10;
   box-shadow: 0 2px 8px rgba(224,120,80,0.07);
 }
-.mascot-img { width: 58px; height: 58px; object-fit: contain; flex-shrink: 0; border-radius: 50%; }
 .header-text h2 { font-size: 16px; font-weight: 700; color: #e07850; }
 .header-text p { font-size: 12px; color: #b07060; }
 .header-user { margin-right: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; color: #b07060; }
@@ -62,54 +59,87 @@ body { font-family: 'Heebo', sans-serif; background: #fff8f4; min-height: 100vh;
 }
 .logout-btn:hover { background: #fff0e8; }
 
-/* FORM */
-.form-body { max-width: 660px; margin: 0 auto; padding: 28px 16px; }
+.step-indicator {
+  display: flex; justify-content: center; align-items: center; gap: 12px; padding: 16px 0 0;
+}
+.step-dot { width: 10px; height: 10px; border-radius: 50%; background: #fcd5bc; transition: all 0.3s; }
+.step-dot.active { background: #e07850; transform: scale(1.3); }
+.step-dot.done { background: #5ab05a; }
+
+.form-body { max-width: 660px; margin: 0 auto; padding: 20px 16px 28px; }
+.step-label { text-align: center; font-size: 13px; color: #c08878; margin-bottom: 20px; }
 
 .emotion-big-card {
   background: linear-gradient(135deg, #fff0e8, #fde8f0);
-  border-radius: 20px; padding: 26px; margin-bottom: 18px; border: 1.5px solid #fcd5bc;
+  border-radius: 20px; padding: 32px 26px 40px; margin-bottom: 18px; border: 1.5px solid #fcd5bc;
 }
-.emotion-title { font-size: 16px; font-weight: 700; color: #e07850; margin-bottom: 3px; }
-.emotion-subtitle { font-size: 12px; color: #c08878; margin-bottom: 18px; }
+.emotion-title { font-size: 18px; font-weight: 700; color: #e07850; margin-bottom: 6px; text-align: center; }
+.emotion-subtitle { font-size: 13px; color: #c08878; margin-bottom: 24px; text-align: center; }
 .emotion-card {
   background: white; border-radius: 18px; padding: 22px; margin-bottom: 16px;
   box-shadow: 0 2px 14px rgba(255,150,100,0.08);
 }
 .axis-label { font-size: 14px; font-weight: 600; color: #555; margin-bottom: 5px; }
-.axis-desc {
-  font-size: 12px; margin-bottom: 16px;
-  display: flex; justify-content: space-between;
-}
+.axis-desc { font-size: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; }
 .axis-desc .red { color: #e05555; }
 .axis-desc .green { color: #5ab05a; }
 
-.slider-wrap { position: relative; margin-top: 20px; padding-bottom: 4px; }
+.slider-wrap { position: relative; margin-top: 24px; padding-bottom: 4px; }
 input[type=range] {
   width: 100%; height: 8px; border-radius: 4px; outline: none; border: none;
   cursor: pointer; -webkit-appearance: none; appearance: none;
 }
 input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%;
+  -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%;
   background: white; border: 3px solid #e07850; cursor: pointer;
   box-shadow: 0 2px 8px rgba(224,120,80,0.3);
 }
 input[type=range]::-moz-range-thumb {
-  width: 26px; height: 26px; border-radius: 50%;
+  width: 28px; height: 28px; border-radius: 50%;
   background: white; border: 3px solid #e07850; cursor: pointer; border-style: solid;
 }
 .slider-val {
-  position: absolute; top: -36px; background: #e07850; color: white;
-  padding: 3px 10px; border-radius: 8px; font-size: 14px; font-weight: 700;
+  position: absolute; top: -38px; background: #f5c842; color: #333;
+  padding: 3px 10px; border-radius: 8px; font-size: 15px; font-weight: 700;
   pointer-events: none;
 }
 .slider-val::after {
   content: ''; position: absolute; bottom: -5px; left: 50%;
   transform: translateX(-50%); border: 5px solid transparent;
-  border-top-color: #e07850; border-bottom: none;
+  border-top-color: inherit; border-bottom: none;
 }
 
+.next-btn {
+  width: 100%; padding: 16px;
+  background: linear-gradient(135deg, #e07850, #d060a0);
+  color: white; border: none; border-radius: 14px;
+  font-family: 'Heebo', sans-serif; font-size: 17px; font-weight: 700;
+  cursor: pointer; transition: opacity 0.2s, transform 0.1s; margin-top: 8px;
+}
+.next-btn:hover { opacity: 0.92; }
+.next-btn:active { transform: scale(0.98); }
+
+.back-btn {
+  width: 100%; padding: 12px; background: none;
+  border: 1.5px solid #fcd5bc; border-radius: 14px; margin-top: 10px;
+  font-family: 'Heebo', sans-serif; font-size: 15px; color: #c08878;
+  cursor: pointer; transition: all 0.2s;
+}
+.back-btn:hover { background: #fff0e8; }
+
+.submit-btn {
+  width: 100%; padding: 16px;
+  background: linear-gradient(135deg, #e07850, #d060a0);
+  color: white; border: none; border-radius: 14px;
+  font-family: 'Heebo', sans-serif; font-size: 17px; font-weight: 700;
+  cursor: pointer; transition: opacity 0.2s, transform 0.1s; margin-bottom: 10px; margin-top: 8px;
+}
+.submit-btn:hover { opacity: 0.92; }
+.submit-btn:active { transform: scale(0.98); }
+.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
 .text-area-card {
-  background: white; border-radius: 18px; padding: 22px; margin-bottom: 22px;
+  background: white; border-radius: 18px; padding: 22px; margin-bottom: 16px;
   box-shadow: 0 2px 14px rgba(255,150,100,0.08);
 }
 .text-area-label { font-size: 14px; font-weight: 600; color: #555; }
@@ -122,54 +152,37 @@ textarea {
 }
 textarea:focus { border-color: #e07850; }
 
-.submit-btn {
-  width: 100%; padding: 16px;
-  background: linear-gradient(135deg, #e07850, #d060a0);
-  color: white; border: none; border-radius: 14px;
-  font-family: 'Heebo', sans-serif; font-size: 17px; font-weight: 700;
-  cursor: pointer; transition: opacity 0.2s, transform 0.1s; margin-bottom: 24px;
+.success-screen { display: none; text-align: center; padding: 60px 20px; }
+.success-screen .check { font-size: 80px; margin-bottom: 20px; }
+.success-screen h2 { font-size: 24px; font-weight: 700; color: #5ab05a; margin-bottom: 10px; }
+.success-screen p { font-size: 15px; color: #888; margin-bottom: 32px; line-height: 1.6; }
+.again-btn {
+  padding: 14px 32px; background: #e07850; color: white; border: none;
+  border-radius: 12px; font-family: 'Heebo', sans-serif; font-size: 15px;
+  font-weight: 600; cursor: pointer; transition: background 0.2s;
 }
-.submit-btn:hover { opacity: 0.92; }
-.submit-btn:active { transform: scale(0.98); }
-.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.success-banner {
-  text-align: center; color: #5ab05a; font-size: 15px; padding: 14px;
-  background: #f0fff0; border-radius: 12px; margin-bottom: 16px; display: none;
-  border: 1px solid #c0e0c0;
-}
+.again-btn:hover { background: #c86840; }
+
 .error-banner {
   text-align: center; color: #e05050; font-size: 14px; padding: 12px;
   background: #fff0f0; border-radius: 12px; margin-bottom: 16px; display: none;
   border: 1px solid #f0c0c0;
 }
 
-/* DASHBOARD */
 .dash-body { max-width: 860px; margin: 0 auto; padding: 28px 16px; }
 .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 14px; margin-bottom: 24px; }
-.stat-card {
-  background: white; border-radius: 16px; padding: 20px; text-align: center;
-  box-shadow: 0 2px 12px rgba(255,150,100,0.08);
-}
+.stat-card { background: white; border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 2px 12px rgba(255,150,100,0.08); }
 .stat-num { font-size: 30px; font-weight: 700; color: #e07850; }
 .stat-label { font-size: 12px; color: #aaa; margin-top: 4px; }
-.avg-bars {
-  background: white; border-radius: 18px; padding: 22px;
-  box-shadow: 0 2px 14px rgba(255,150,100,0.08); margin-bottom: 22px;
-}
+.avg-bars { background: white; border-radius: 18px; padding: 22px; box-shadow: 0 2px 14px rgba(255,150,100,0.08); margin-bottom: 22px; }
 .avg-bars h3 { font-size: 15px; font-weight: 600; color: #555; margin-bottom: 18px; }
 .bar-row { margin-bottom: 14px; }
 .bar-label { font-size: 13px; color: #777; margin-bottom: 5px; display: flex; justify-content: space-between; }
 .bar-track { height: 11px; background: #f5e8e0; border-radius: 6px; overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 6px; }
-.responses-list {
-  background: white; border-radius: 18px; padding: 22px;
-  box-shadow: 0 2px 14px rgba(255,150,100,0.08); margin-bottom: 22px;
-}
+.responses-list { background: white; border-radius: 18px; padding: 22px; box-shadow: 0 2px 14px rgba(255,150,100,0.08); margin-bottom: 22px; }
 .responses-list h3 { font-size: 15px; font-weight: 600; color: #555; margin-bottom: 16px; }
-.response-row {
-  display: flex; align-items: center; gap: 10px; padding: 11px 0;
-  border-bottom: 1px solid #fce8d8; font-size: 13px; flex-wrap: wrap;
-}
+.response-row { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 1px solid #fce8d8; font-size: 13px; flex-wrap: wrap; }
 .response-row:last-child { border-bottom: none; }
 .resp-user { font-weight: 700; color: #e07850; min-width: 80px; }
 .resp-date { color: #bbb; font-size: 11px; min-width: 90px; }
@@ -181,18 +194,13 @@ textarea:focus { border-color: #e07850; }
 .resp-note { font-size: 11px; color: #999; font-style: italic; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .no-data { text-align: center; color: #ccc; padding: 36px; font-size: 14px; }
 .loading-dash { text-align: center; color: #e07850; padding: 40px; font-size: 15px; }
-.refresh-btn {
-  background: none; border: 1px solid #fcd5bc; border-radius: 10px;
-  padding: 8px 16px; font-family: 'Heebo', sans-serif; font-size: 13px;
-  cursor: pointer; color: #e07850; transition: all 0.2s; margin-bottom: 16px;
-}
+.refresh-btn { background: none; border: 1px solid #fcd5bc; border-radius: 10px; padding: 8px 16px; font-family: 'Heebo', sans-serif; font-size: 13px; cursor: pointer; color: #e07850; transition: all 0.2s; margin-bottom: 16px; }
 .refresh-btn:hover { background: #fff0e8; }
-.note-full { font-size: 12px; color: #888; margin-top: 4px; font-style: italic; }
 </style>
 </head>
 <body>
 
-<!-- ===== LOGIN ===== -->
+<!-- LOGIN -->
 <div id="login-page" class="page active">
   <div class="login-card">
     <img src="בינלה דמות.png" style="width:110px;height:110px;object-fit:contain;margin-bottom:8px;">
@@ -210,7 +218,7 @@ textarea:focus { border-color: #e07850; }
   </div>
 </div>
 
-<!-- ===== FORM ===== -->
+<!-- FORM -->
 <div id="form-page" class="page">
   <div class="form-header">
     <img src="בינלה דמות.png" style="width:58px;height:58px;object-fit:contain;flex-shrink:0;">
@@ -223,68 +231,88 @@ textarea:focus { border-color: #e07850; }
       <button class="logout-btn" onclick="doLogout()">יציאה</button>
     </div>
   </div>
+
+  <div class="step-indicator">
+    <div class="step-dot active" id="dot0"></div>
+    <div class="step-dot" id="dot1"></div>
+  </div>
+
   <div class="form-body">
 
-    <!-- ציר רגש כללי -->
-    <div class="emotion-big-card">
-      <div class="emotion-title">איך אני מרגיש/ה עם AI עכשיו?</div>
-      <div class="emotion-subtitle">ציר הרגש הכללי שלי</div>
-      <div class="axis-desc">
-        <span class="red">😰 חשש ובהלה</span>
-        <span class="green">🤩 התרגשות והתלהבות</span>
+    <!-- שלב 1 -->
+    <div id="step1">
+      <p class="step-label">שלב 1 מתוך 2</p>
+      <div class="emotion-big-card">
+        <div class="emotion-title">איך אני מרגיש/ה עם AI עכשיו?</div>
+        <div class="emotion-subtitle">ציר הרגש הכללי שלי</div>
+        <div class="axis-desc">
+          <span class="red">😰 חשש ובהלה</span>
+          <span class="green">🤩 התרגשות והתלהבות</span>
+        </div>
+        <div class="slider-wrap">
+          <div class="slider-val" id="v0">5</div>
+          <input type="range" min="0" max="10" value="5" id="s0" oninput="upd(this,'v0')">
+        </div>
       </div>
-      <div class="slider-wrap">
-        <div class="slider-val" id="v0" style="left:50%">5</div>
-        <input type="range" min="0" max="10" value="5" id="s0" oninput="upd(this,'v0')">
-      </div>
+      <button class="next-btn" onclick="goStep2()">המשך ←</button>
     </div>
 
-    <!-- ציר 1 -->
-    <div class="emotion-card">
-      <div class="axis-label">1. עד כמה אני מרגיש/ה בנוח לשלב AI עם הלקוחות?</div>
-      <div class="axis-desc"><span class="red">לא בנוח כלל</span><span class="green">מאוד בנוח</span></div>
-      <div class="slider-wrap">
-        <div class="slider-val" id="v1" style="left:50%">5</div>
-        <input type="range" min="0" max="10" value="5" id="s1" oninput="upd(this,'v1')">
+    <!-- שלב 2 -->
+    <div id="step2" style="display:none;">
+      <p class="step-label">שלב 2 מתוך 2</p>
+
+      <div class="emotion-card">
+        <div class="axis-label">1. עד כמה אני מרגיש/ה בנוח לשלב AI עם הלקוחות?</div>
+        <div class="axis-desc"><span class="red">לא בנוח כלל</span><span class="green">מאוד בנוח</span></div>
+        <div class="slider-wrap">
+          <div class="slider-val" id="v1">5</div>
+          <input type="range" min="0" max="10" value="5" id="s1" oninput="upd(this,'v1')">
+        </div>
       </div>
+
+      <div class="emotion-card">
+        <div class="axis-label">2. האם השתמשתי בכלי AI השבוע?</div>
+        <div class="axis-desc"><span class="red">לא משתמש/ת בכלל</span><span class="green">משתמש/ת באופן תדיר</span></div>
+        <div class="slider-wrap">
+          <div class="slider-val" id="v2">5</div>
+          <input type="range" min="0" max="10" value="5" id="s2" oninput="upd(this,'v2')">
+        </div>
+      </div>
+
+      <div class="emotion-card">
+        <div class="axis-label">3. האם AI חסך לי זמן בעבודה השבוע?</div>
+        <div class="axis-desc"><span class="red">לא חסך זמן בכלל</span><span class="green">חסך לי זמן רב</span></div>
+        <div class="slider-wrap">
+          <div class="slider-val" id="v3">5</div>
+          <input type="range" min="0" max="10" value="5" id="s3" oninput="upd(this,'v3')">
+        </div>
+      </div>
+
+      <div class="text-area-card">
+        <div class="text-area-label">
+          מחשבות נוספות שלי על השימוש בבינה
+          <span class="optional-tag">(לא חובה)</span>
+        </div>
+        <textarea id="free-text" placeholder="כתוב/י כאן מה שעל הלב..."></textarea>
+      </div>
+
+      <div class="error-banner" id="error-banner">⚠️ שגיאה בשמירה. נסי שוב.</div>
+      <button class="submit-btn" id="submit-btn" onclick="submitForm()">שלח/י דיווח 💛</button>
+      <button class="back-btn" onclick="goStep1()">← חזרה</button>
     </div>
 
-    <!-- ציר 2 -->
-    <div class="emotion-card">
-      <div class="axis-label">2. האם השתמשתי בכלי AI השבוע?</div>
-      <div class="axis-desc"><span class="red">לא משתמש/ת בכלל</span><span class="green">משתמש/ת באופן תדיר</span></div>
-      <div class="slider-wrap">
-        <div class="slider-val" id="v2" style="left:50%">5</div>
-        <input type="range" min="0" max="10" value="5" id="s2" oninput="upd(this,'v2')">
-      </div>
+    <!-- הצלחה -->
+    <div class="success-screen" id="success-screen">
+      <div class="check">✅</div>
+      <h2>הדיווח נשלח בהצלחה!</h2>
+      <p>תודה על השיתוף 💛<br>הנתונים שלך נשמרו בגוגל שיטס.</p>
+      <button class="again-btn" onclick="resetAll()">דיווח נוסף</button>
     </div>
 
-    <!-- ציר 3 -->
-    <div class="emotion-card">
-      <div class="axis-label">3. האם AI חסך לי זמן בעבודה השבוע?</div>
-      <div class="axis-desc"><span class="red">לא חסך זמן בכלל</span><span class="green">חסך לי זמן רב</span></div>
-      <div class="slider-wrap">
-        <div class="slider-val" id="v3" style="left:50%">5</div>
-        <input type="range" min="0" max="10" value="5" id="s3" oninput="upd(this,'v3')">
-      </div>
-    </div>
-
-    <!-- מלל חופשי -->
-    <div class="text-area-card">
-      <div class="text-area-label">
-        מחשבות נוספות שלי על השימוש בבינה
-        <span class="optional-tag">(לא חובה)</span>
-      </div>
-      <textarea id="free-text" placeholder="כתוב/י כאן מה שעל הלב..."></textarea>
-    </div>
-
-    <div class="success-banner" id="success-banner">✅ הדיווח נשמר בהצלחה בגוגל שיטס! תודה 💛</div>
-    <div class="error-banner" id="error-banner">⚠️ שגיאה בשמירה. נסי שוב.</div>
-    <button class="submit-btn" id="submit-btn" onclick="submitForm()">שלח/י דיווח</button>
   </div>
 </div>
 
-<!-- ===== DASHBOARD ===== -->
+<!-- DASHBOARD -->
 <div id="dashboard-page" class="page">
   <div class="form-header">
     <img src="בינלה דמות.png" style="width:58px;height:58px;object-fit:contain;flex-shrink:0;">
@@ -303,10 +331,7 @@ textarea:focus { border-color: #e07850; }
 </div>
 
 <script>
-// ======= הגדר כאן את ה-URL של ה-Apps Script שלך =======
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6oTPmIpVwr0nKkPRcv5poj3OT6nuca42UWVjSs81vBX-WDNx7A9sMowc_xcSSJVyfzg/exec';
-// =========================================================
-
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'binala2024';
 let loginMode = 'user';
@@ -348,7 +373,7 @@ function doLogin() {
   currentUser = { name, role: 'user' };
   document.getElementById('user-display').textContent = 'שלום, ' + name;
   showPage('form-page');
-  resetForm();
+  resetAll();
 }
 
 function doLogout() {
@@ -359,37 +384,57 @@ function doLogout() {
   showPage('login-page');
 }
 
-// ---- Sliders ----
-function upd(el, vid) {
-  const v = parseInt(el.value);
-  const pct = v / 10;
-  // traffic light color
-  const color = v <= 3 ? '#e05555' : v <= 6 ? '#f5c842' : '#5ab05a';
-  const bgColor = v <= 3 ? '#fdd' : v <= 6 ? '#ffe' : '#dfd';
-  const filled = pct * 100;
-  el.style.background = `linear-gradient(to right, ${color} 0%, ${color} ${filled}%, #e8e0d8 ${filled}%, #e8e0d8 100%)`;
-  const lbl = document.getElementById(vid);
-  lbl.textContent = v;
-  // position label (0%=right, 100%=left in RTL — but input goes left-to-right visually)
-  lbl.style.left = `calc(${filled}% - 14px)`;
-  lbl.style.background = color;
-  lbl.querySelector && null; // just reference
-  // update arrow color via inline style trick
-  lbl.setAttribute('data-color', color);
+function goStep2() {
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+  document.getElementById('success-screen').style.display = 'none';
+  document.getElementById('dot0').className = 'step-dot done';
+  document.getElementById('dot1').className = 'step-dot active';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function resetForm() {
+function goStep1() {
+  document.getElementById('step1').style.display = 'block';
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('dot0').className = 'step-dot active';
+  document.getElementById('dot1').className = 'step-dot';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetAll() {
   ['s0','s1','s2','s3'].forEach((id,i) => {
     const el = document.getElementById(id);
     el.value = 5;
     upd(el, 'v' + i);
   });
   document.getElementById('free-text').value = '';
-  document.getElementById('success-banner').style.display = 'none';
   document.getElementById('error-banner').style.display = 'none';
+  document.getElementById('success-screen').style.display = 'none';
+  document.getElementById('step1').style.display = 'block';
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('dot0').className = 'step-dot active';
+  document.getElementById('dot1').className = 'step-dot';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ---- Submit ----
+// SLIDERS - ימין = גבוה (10), שמאל = נמוך (0)
+function upd(el, vid) {
+  const raw = parseInt(el.value); // 0-10 מהסליידר (שמאל לימין)
+  const v = raw; // הערך שמוצג
+  const pct = raw * 10; // אחוז מילוי מימין
+  const color = v <= 3 ? '#e05555' : v <= 6 ? '#f5c842' : '#5ab05a';
+  // בכיוון RTL, ימין הוא 0% ושמאל הוא 100% ויזואלית
+  // אבל input[type=range] תמיד הולך משמאל לימין בדפדפן
+  // לכן: ימין = value גדול = ירוק
+  el.style.background = `linear-gradient(to right, #e8e0d8 0%, #e8e0d8 ${100-pct}%, ${color} ${100-pct}%, ${color} 100%)`;
+  const lbl = document.getElementById(vid);
+  lbl.textContent = v;
+  // מקם את התווית מעל האגודל
+  lbl.style.left = `calc(${pct}% - 14px)`;
+  lbl.style.background = color;
+  lbl.style.color = v <= 6 && v > 3 ? '#333' : 'white';
+}
+
 async function submitForm() {
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
@@ -397,8 +442,8 @@ async function submitForm() {
   document.getElementById('error-banner').style.display = 'none';
 
   const payload = {
-    date: new Date().toLocaleDateString('he-IL'),
-    user: currentUser.name,
+    date:    new Date().toLocaleDateString('he-IL'),
+    user:    currentUser.name,
     emotion: parseInt(document.getElementById('s0').value),
     comfort: parseInt(document.getElementById('s1').value),
     usage:   parseInt(document.getElementById('s2').value),
@@ -408,24 +453,23 @@ async function submitForm() {
 
   try {
     await fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
+      method: 'POST', mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    document.getElementById('success-banner').style.display = 'block';
-    setTimeout(() => { document.getElementById('success-banner').style.display = 'none'; }, 4000);
-    resetForm();
+    document.getElementById('step2').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    document.getElementById('dot0').className = 'step-dot done';
+    document.getElementById('dot1').className = 'step-dot done';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch(e) {
     document.getElementById('error-banner').style.display = 'block';
   }
 
   btn.disabled = false;
-  btn.textContent = 'שלח/י דיווח';
+  btn.textContent = 'שלח/י דיווח 💛';
 }
 
-// ---- Dashboard ----
 function scoreClass(v) { return +v<=3 ? 'score-low' : +v<=6 ? 'score-mid' : 'score-high'; }
 function barColor(v)    { return +v<=3 ? '#e05555' : +v<=6 ? '#f5c842' : '#5ab05a'; }
 
@@ -451,14 +495,12 @@ function renderDashboard(all) {
   const total = all.length;
   const users = [...new Set(all.map(r => r.user))].length;
   const avg = k => total ? (all.reduce((s,r) => s + (+r[k]||0), 0) / total).toFixed(1) : '-';
-
   const axes = [
     { key:'emotion', label:'רגש כללי (חשש → התלהבות)' },
     { key:'comfort', label:'נוחות שילוב AI עם לקוחות' },
     { key:'usage',   label:'תדירות שימוש ב-AI' },
     { key:'time',    label:'חיסכון בזמן' }
   ];
-
   let barsHTML = total ? axes.map(a => {
     const v = parseFloat(avg(a.key));
     const c = barColor(v);
@@ -494,7 +536,6 @@ function renderDashboard(all) {
   `;
 }
 
-// Init sliders on load
 ['s0','s1','s2','s3'].forEach((id,i) => { const el=document.getElementById(id); upd(el,'v'+i); });
 </script>
 </body>
