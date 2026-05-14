@@ -306,6 +306,11 @@ textarea:focus { border-color: #e07850; }
       <div class="check">✅</div>
       <h2>הדיווח נשלח בהצלחה!</h2>
       <p>תודה על השיתוף 💛<br>הנתונים שלך נשמרו בגוגל שיטס.</p>
+      <div id="personal-chart-wrap" style="margin:24px 0 28px;background:white;border-radius:18px;padding:20px;box-shadow:0 2px 14px rgba(255,150,100,0.1);text-align:right;">
+        <div style="font-size:14px;font-weight:700;color:#e07850;margin-bottom:16px;">📈 הרגש שלי עם AI לאורך הזמן</div>
+        <canvas id="emotion-chart" height="180"></canvas>
+        <div id="chart-no-data" style="text-align:center;color:#ccc;padding:30px;display:none;">אין עדיין מספיק נתונים להצגת גרף</div>
+      </div>
       <button class="again-btn" onclick="resetAll()">דיווח נוסף</button>
     </div>
 
@@ -417,22 +422,18 @@ function resetAll() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// SLIDERS - ימין = גבוה (10), שמאל = נמוך (0)
+// SLIDERS
 function upd(el, vid) {
-  const raw = parseInt(el.value); // 0-10 מהסליידר (שמאל לימין)
-  const v = raw; // הערך שמוצג
-  const pct = raw * 10; // אחוז מילוי מימין
+  const v = parseInt(el.value);
+  const pct = v * 10;
   const color = v <= 3 ? '#e05555' : v <= 6 ? '#f5c842' : '#5ab05a';
-  // בכיוון RTL, ימין הוא 0% ושמאל הוא 100% ויזואלית
-  // אבל input[type=range] תמיד הולך משמאל לימין בדפדפן
-  // לכן: ימין = value גדול = ירוק
   el.style.background = `linear-gradient(to right, #e8e0d8 0%, #e8e0d8 ${100-pct}%, ${color} ${100-pct}%, ${color} 100%)`;
   const lbl = document.getElementById(vid);
   lbl.textContent = v;
-  // מקם את התווית מעל האגודל
-  lbl.style.left = `calc(${pct}% - 14px)`;
+  const thumbPct = 100 - pct;
+  lbl.style.left = `calc(${thumbPct}% - 14px)`;
   lbl.style.background = color;
-  lbl.style.color = v <= 6 && v > 3 ? '#333' : 'white';
+  lbl.style.color = v > 3 && v <= 6 ? '#333' : 'white';
 }
 
 async function submitForm() {
@@ -462,6 +463,7 @@ async function submitForm() {
     document.getElementById('dot0').className = 'step-dot done';
     document.getElementById('dot1').className = 'step-dot done';
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    loadPersonalChart();
   } catch(e) {
     document.getElementById('error-banner').style.display = 'block';
   }
@@ -534,6 +536,92 @@ function renderDashboard(all) {
     <div class="avg-bars"><h3>ממוצעים לפי ציר</h3>${barsHTML}</div>
     <div class="responses-list"><h3>כל הדיווחים (${total})</h3>${rowsHTML}</div>
   `;
+}
+
+function loadPersonalChart() {
+  const name = currentUser ? currentUser.name : '';
+  if (!name) return;
+  const callbackName = 'chartcb_' + Date.now();
+  const script = document.createElement('script');
+  script.src = SCRIPT_URL + '?callback=' + callbackName + '&nocache=' + Date.now();
+  window[callbackName] = function(data) {
+    delete window[callbackName];
+    document.head.removeChild(script);
+    const myData = Array.isArray(data) ? data.filter(r => r.user === name) : [];
+    const canvas = document.getElementById('emotion-chart');
+    const noData = document.getElementById('chart-no-data');
+    if (myData.length === 0) {
+      canvas.style.display = 'none';
+      noData.style.display = 'block';
+      return;
+    }
+    canvas.style.display = 'block';
+    noData.style.display = 'none';
+    const labels = myData.map(r => r.date);
+    const values = myData.map(r => +r.emotion);
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const W = canvas.offsetWidth || 400;
+    canvas.width = W;
+    canvas.height = 180;
+    const pad = { top: 20, right: 20, bottom: 40, left: 30 };
+    const w = W - pad.left - pad.right;
+    const h = canvas.height - pad.top - pad.bottom;
+    const n = values.length;
+    // grid
+    ctx.strokeStyle = '#f5e8e0';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 10; i += 2) {
+      const y = pad.top + h - (i / 10) * h;
+      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + w, y); ctx.stroke();
+      ctx.fillStyle = '#bbb'; ctx.font = '10px Heebo'; ctx.textAlign = 'right';
+      ctx.fillText(i, pad.left - 4, y + 4);
+    }
+    // line
+    const xStep = n > 1 ? w / (n - 1) : w / 2;
+    const pts = values.map((v, i) => ({
+      x: pad.left + (n > 1 ? i * xStep : w / 2),
+      y: pad.top + h - (v / 10) * h
+    }));
+    // gradient fill
+    const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + h);
+    grad.addColorStop(0, 'rgba(224,120,80,0.25)');
+    grad.addColorStop(1, 'rgba(224,120,80,0)');
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pad.top + h);
+    pts.forEach(p => ctx.lineTo(p.x, p.y));
+    ctx.lineTo(pts[pts.length-1].x, pad.top + h);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+    // line
+    ctx.beginPath();
+    ctx.strokeStyle = '#e07850';
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'round';
+    pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+    ctx.stroke();
+    // dots + color
+    pts.forEach((p, i) => {
+      const v = values[i];
+      const c = v <= 3 ? '#e05555' : v <= 6 ? '#f5c842' : '#5ab05a';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = c;
+      ctx.fill();
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      // date label
+      ctx.fillStyle = '#aaa';
+      ctx.font = '9px Heebo';
+      ctx.textAlign = 'center';
+      const shortDate = labels[i] ? labels[i].split('/').slice(0,2).join('/') : '';
+      ctx.fillText(shortDate, p.x, pad.top + h + 16);
+    });
+  };
+  script.onerror = function() { delete window[callbackName]; document.head.removeChild(script); };
+  document.head.appendChild(script);
 }
 
 ['s0','s1','s2','s3'].forEach((id,i) => { const el=document.getElementById(id); upd(el,'v'+i); });
